@@ -127,3 +127,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Jupyter
+*.ipynb*
+
+
+# OS files (from MacOS, Windows)
+.DS_Store
+thumbs.db
