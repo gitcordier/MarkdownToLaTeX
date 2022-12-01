@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 [project]
 name = "MarkdownToLaTeX"
-version = "0.0.2"
+version = "0.0.1"
 authors = [
   { name="gitcordier", email="admin@gcordier.eu" },
 ]
