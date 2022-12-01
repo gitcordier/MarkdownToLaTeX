@@ -1,0 +1,247 @@
+% a4paper = ISO 216 standard. 
+% Don't forget to revert to default if you want the US Letter instead.
+\documentclass[a4paper,11pt,titlepage,openany, leqno]{article}
+
+%: MATH PACKAGE USED
+%\usepackage{graphicx}
+
+\usepackage{amsmath}
+\usepackage{
+physics, 
+amssymb, 
+mathrsfs, 
+amsthm, 
+mathspec, 
+fouridx, 
+%%stix
+%%tensor
+theorem, 
+tikz
+}
+\usetikzlibrary{arrows,snakes,backgrounds,patterns,matrix,shapes,fit,calc,shadows,plotmarks}
+
+%\usetikzlibrary{shapes.geometric}
+%\usetikzlibrary{arrows.meta,arrows}
+%\usepackage{tlatex}
+% TEXs LOGOS! 
+%\usepackage{dtklogos}
+
+%\usepackage[bottom=3cm,top=2cm]{geometry}
+% Metric system, sorry;)
+\usepackage[left=3cm,top=3cm,right=3cm,bottom=3cm]{geometry}
+%: COLOR
+\usepackage{array}
+%\usepackage[dvipsnames]{xcolor}
+%\usepackage[]{color}
+%\usepackage{framed}
+\usepackage{colortbl}
+
+%: FOR XELATEX. SKIP IF ERROR MESSAGE
+\usepackage{xltxtra,xunicode}
+%: for HEVEA- Uncomment before using XeTeX
+%\usepackage[utf8]{inputenc}
+\usepackage[xetex]{hyperref}
+%\usepackage{hyperref}
+%\usepackage{listings}
+\hypersetup{%
+    pdfborder = {0 0 0},
+    colorlinks,
+    citecolor=red,
+    filecolor=green,
+    linkcolor=black,
+    urlcolor=blue%cyan!50!black!90
+}
+\defaultfontfeatures{Mapping=tex-text}
+
+% FONTS: PERSONNAL CHOICE- CAN BE CHANGED!
+\newfontfamily{\CMUCS}{CMU Classical Serif}
+\newfontfamily{\CMU}{CMU Serif}
+\newfontfamily{\CMUSS}{CMU Sans Serif}
+\newfontfamily{\fw}{CMU Typewriter Text Light}
+%\newfontfamily{\Arabic}{Al Bayan}
+% On mac OS:
+%\newfontfamily{\Didot}{Didot}
+% Alternatively, for all Unix systems:
+%\newfontfamily{\Didot}{Theano Didot}
+%\usepackage{mathspec}
+\def\mainfont{CMU Serif}
+\setmainfont{\mainfont}
+
+\setmathfont(Latin)[Uppercase=Regular,Lowercase=Regular]{\mainfont}
+\setmathfont(Greek)[Uppercase=Regular,Lowercase=Regular]{\mainfont}
+\setmathrm{\mainfont}
+\setmathbb{\mainfont}
+%\setmathit{\mainfont}
+\setmathtt{CMU Typewriter Text Light}
+%\setmathbf{CMU Serif}
+
+
+%: TYPOGRAPHIC CONVENTIONS, XETEX
+\usepackage{polyglossia}
+%\selectbackgroundlanguage[variant=usmax]{english}
+\setdefaultlanguage[variant=usmax]{english}
+
+%
+%\usepackage{glossaries}
+%\makeglossaries
+
+
+%\newglossaryentry{maths}
+%{
+%    name=mathematics,
+%    description={Mathematics is what mathematicians do}
+%}
+%: ----------------------------PRIMITIVES------------------------------------- 
+\newcommand{\insmall}[1]{\text{\small{#1}}}
+% Some acceptable minus sign.
+\def\minus{\insmall{-}}
+
+% The field C and the usual subsets R, Q, Z, N. 
+\newcommand\usualSet[1]{{\mathbf #1}}
+\def\C{\usualSet{C}}
+\def\R{\usualSet{R}}
+\def\Q{\usualSet{Q}}
+\def\Z{\usualSet{Z}}
+\def\N{\usualSet{N}}
+\def\K{\usualSet{K}}
+
+% "Defined as equals to", alternative to := .
+\def\Def{\triangleq}
+
+% The usual scalar field = C, most of the time.
+\def\field{\C}
+
+% Counting numbers
+\newcommand\counting[1]{#1=1, 2, 3, \dots}
+% integers (nonnegative)
+\newcommand\integers[1]{#1=0, 1, 2, \dots}
+\newcommand{\D}{{\mathscr D}}
+
+% Indices: upper, lower
+\newcommand{\up}[1]{^{(#1)}}
+\newcommand{\low}[1]{_{#1}}
+\newcommand{\upnw}[2]{\fourIdx{#2}{}{}{}#1}
+\newcommand{\downsw}[2]{\fourIdx{}{#2}{}{}#1}
+\newcommand{\scriptatleft}[3]{\fourIdx{#2}{#3}{}{}#1}
+\newcommand{\diagscript}[3]{\fourIdx{#2}{}{}{#3}#1}
+%\tensor*[^x]{V}{_k}
+
+% function, relation
+\newcommand{\function}[1]{\mathtt{#1}}
+\newcommand{\relation}[2]{{#1}_{#2}}
+\newcommand{\f}[2]{#1(#2)}
+\DeclareMathOperator\supp{supp}
+
+% Sets
+%\renewcommand{\notin}{\tiny{\not\in}}
+\def\contains{\supset}
+\def\cuts{\cap}
+\DeclareMathOperator\cvxhull{co}
+\newcommand{\co}[1]{\cvxhull(#1)}
+\newcommand{\set}[2]{\{#1: #2\}}
+\newcommand{\singleton}[1]{\{#1\}}
+\newcommand{\interior}[1]{\overset{\circ}{#1}}
+\newcommand{\closure}[1]{\overline{#1}}
+
+
+% Arithmetics
+\newcommand{\ceil}[1]{\lceil #1 \rceilf}
+% Analysis
+\newcommand\magnitude[1]{\left\lvert\, #1 \,\right\rvert}
+\renewcommand{\norm}[2]{\| \,#2 \, \|_{#1}}
+\def\weakstar{\text{weak}^\ast\text{-}}
+% Topology
+\newcommand{\localbase}[1]{\mathscr #1}
+
+%Iverson bracket
+\newcommand{\boolean}[1]{\left[\,#1\,\right]}
+
+% limits
+\newcommand{\tendsto}[2]{\underset{#1\to #2}{\longrightarrow}}
+
+% Variables
+\newcommand{\varit}[1]{\mathit{#1}}
+\def\vart{\varit{t}}
+%Usual terms
+\def\ie{\textit{i.e.} }
+\def\eg{\textit{e.g.} }
+\def\cf{\textit{cf.\,}}
+\def\iif{{\bf iff} }
+\def\wlg{{\bf wlg }} % Without loss og generality
+\def\then{\Rightarrow}
+\def\therefore{\Rightarrow}
+\def\since{\Leftarrow}
+
+% Citations
+\newcommand{\citehere}[2]{\overset{(#1)}{#2}}
+\newcommand{\citeq}[1]{\citehere{#1}{=}}
+%\newcomand{\citeineq}[1]{\citehere{#1}{=}}
+\newcommand{\citeleq}[1]{\citehere{#1}{\leq}}
+\newcommand{\citegeq}[1]{\citehere{#1}{\geq}}
+\newcommand{\citeleast}[1]{\citehere{#1}{<}}
+\newcommand{\citegreater}[1]{\citehere{#1}{>}}
+
+\newcommand{\citesubset}[1]{\citehere{#1}{\subset}}
+\newcommand{\citesupset}[1]{\citehere{#1}{\supset}}
+
+\newcommand{\citethen}[1]{\citehere{#1}{\Rightarrow}}
+%\newcommand{\citesince}[1]{\citehere{#1}{\Leftarrow}}
+\newcommand{\citeresult}[2]{#1 of #2}
+\newcommand{\citeresultFA}[1]{\citeresult{#1}{\cite{FA}}}
+
+\newcommand{\citin}[1]{\citehere{#1}{\in}}
+% Misc
+\newcommand{\underbarwithindex}[2]{\underline{#1}\,\!_{#2}}
+\newcommand{\dy}[1]{{\function{dyadic}}(#1)}
+\def\ddy{{\function{decay}}}
+
+%--------------END OF PRIMITIVES--------------------------------
+\def\ROOT{ ROOT IS DEFINED HERE}
+\def\TITLE{
+  TITLE IS DEFINED HERE
+}
+\def\EMAIL{}
+\def\AUTHOR{gitcordier}
+
+\begin{document}
+%\begin{abstract}
+%    \input{\ROOT/abstract.tex}
+%\end{abstract}
+\title{\TITLE}
+\author{\AUTHOR}
+\date{\today}
+\maketitle
+
+% FORMAT ENUMERATION (DEFAULT. OPTIONS: ALPH, ARABIC, ROMAN,…)
+\renewcommand{\labelenumi}{$(\textit{\alph{enumi}}\,)$}
+% IF LANG = @fr
+%\renewcommand{\chaptername}{Chapitre}
+%
+% CHAPTER  NAME :
+%\frontmatter
+%\tableofcontents
+%\clearpage
+
+%\printglossary
+%\input{\ROOT/notations.tex}
+%\setcounter{chapter}{0}
+%\mainmatter
+%\part{Content}
+\input{\ROOT/mainmatter.tex}
+%\backmatter
+%\part{Annex}
+%\renewcommand\thechapter{\Alph{chapter}}
+%\setcounter{chapter}{1}
+%\chapter{Additional results}
+%\newcounter{annex}
+%\setcounter{annex}{1}
+%\renewcommand\thesection{\thechapter.\arabic{annex}}
+%\section{Number theory}
+%\input{\ROOT/Annex_number_theory.tex}
+\bibliographystyle{plain}
+\bibliography{bibliography}{}
+\addcontentsline{toc}{chapter}{Bibliography}
+\end{document}
+
+
+%Made on \XeTeX

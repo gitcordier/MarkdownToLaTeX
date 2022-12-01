@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[project]
+name = "MarkdownToLaTeX"
+version = "0.0.1"
+authors = [
+  { name="gitcordier", email="admin@gcordier.eu" },
+]
+maintainers = [
+  { name="gitcordier", email="admin@gcordier.eu" },
+]
+description = "Markdown to LaTeX"
+keywords=["LaTeX", "Markdown", "Markdown to LaTeX"]
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Topic :: Text Processing :: Markup :: LaTeX",
+    "Topic :: Utilities"
+]
+[project.scripts]
+"markdowntolatex" = "markdowntolatex.user.choice:markdown_to_latex"
+[project.urls]
+"Homepage" = "https://github.com/gitcordier/MarkdownToLaTeX"
+"Bug Tracker" = "https://github.com/gitcordier/MarkdownToLaTeX/issues"
+"Documentation" = "https://markdowntolatex.readthedocs.io"
