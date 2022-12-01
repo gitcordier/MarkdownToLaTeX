@@ -87,7 +87,7 @@ class Document():
         # Tree does not exist yet:
         self.tree = None
     #
-    def parse(self):
+    def parse_markdown(self):
         '''
             Parses the document.
         '''
@@ -112,9 +112,17 @@ class Document():
         # For chained calls:
         return self
 
-    def create(self):
+    def get_latex(self):
         '''
-            From DM to LaTeX.
+            From Markdown to LaTeX.
+
+            Creates the latex code after the parsing is done.
+
+            Formally speaking, this is a getter, since a ditionary 
+            dict {'folder', 'document'} is returned. 
+
+            :return: A dictionary dict{folder, document}.
+            :rtype: dict
         '''
         ## Clean up 
         root = os.path.join(self.current_folder, 'output/')
@@ -128,7 +136,7 @@ class Document():
             os.mkdir(root)
         except FileExistsError:
             pass
-        self.__private__get_latex_recursively(folder=root, index = 1)
+        return self.__private__get_latex_recursively(folder=root, index = 1)
     #
     # Return folder, document 
     def __private__get_latex_recursively(self, folder='', index=1, tree=None):

@@ -20,11 +20,11 @@ def markdown_to_latex():
         When the binary is run, this method is called hunder the hood.
     '''
     Choice().markdown_to_latex()
-
+#
 class Choice(dict):
     '''
-        The User's inputs are collected then recorded into a dictionary, 
-        which is the Choice object itself.
+        User's inputs are collected then recorded into a dictionary, 
+        which is the **Choice** instance itself.
     '''
     def __init__(self):
         # Let's instantiate the parser:
@@ -67,9 +67,9 @@ class Choice(dict):
     def markdown_to_latex(self):
         if self['version'] == False:
             preferences = self['preferences']
-            X = '/Users/gcordier/.tlaplus/mdToLaTeX/implementation/my_documentation/preferences/preferences.json'
-            latex = Document(X)
-            latex.parse().create()
+            document = Document(preferences)
+            dictionary = document.parse_markdown().get_latex()
+            print('LaTeX code was created in folder %s .'%dictionary['folder'])
         else:
             print("%s's current version is %s."%(NAME, VERSION))
             return
@@ -79,6 +79,6 @@ class Choice(dict):
 # Choice: END
 
 # If you don't use the binary, uncomment the below line.
-# markdown_to_latex()
+#markdown_to_latex()
 # END
 

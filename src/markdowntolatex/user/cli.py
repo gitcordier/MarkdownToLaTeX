@@ -4,27 +4,28 @@
 # Description
 '''
     Command line interface definition. 
-    A dictionary **ARGUMENT** stores arguments definitions. 
+    A dictionary **ARGUMENT** stores all arguments definitions. 
 '''
-from markdowntolatex.constants import DEFAULT_PREFERENCES
+from markdowntolatex.constants import DEFAULT_PATH_FOR_PREFERENCES
 
 
 MAX_NUMBEROF_INPUTS = 3 
 '''
     The maximal number of input strings we expect from the user: 
-    Two arguments (help, preferences), one value (for preferences). 3, then
+    Two arguments (help, preferences), one value (for preferences). 
+    Three, then
 '''
 
-ARGUMENT  = {
+ARGUMENT = {
     'help': {
         'flags': ['-h', '--help'], # Don't use
         'parameters for CLI':{
             'dest': 'help',
             'nargs': '?',
             'help': 
-            ''''
-                MarkdownToLaTeX 
-            '''
+                '''
+                    MarkdownToLaTeX help
+                '''
         }
     },
     'version': {
@@ -34,7 +35,12 @@ ARGUMENT  = {
             'nargs': '?',
             'const': True,
             'default': False, # If 'version' not present.
-            'help': 'Package version, following the usual “major.minor.micro” scheme (1.1.1, 1.2.3, 3.2.1, and so on).'
+            'help': 
+                '''
+                    Package version, following the usual 
+                    “major.minor.micro” scheme 
+                    (1.1.1, 1.2.3, 3.2.1, and so on).
+                '''
         }
     },
     'preferences': {
@@ -42,13 +48,19 @@ ARGUMENT  = {
         'parameters for CLI':{
             'nargs':'?', 
             'dest': 'preferences', 
-            'const': DEFAULT_PREFERENCES, 
-            'default': DEFAULT_PREFERENCES, # If 'preferences' not present.
+            'const': DEFAULT_PATH_FOR_PREFERENCES, 
+            'default': DEFAULT_PATH_FOR_PREFERENCES, # If no 'preferences'
             'metavar': 'JSON file',
-            'help': '''
-                Path to the JSON file that stores your preferences. 
-                Default is set to \'preferences/preferences.json\' .'''
+            'help': 
+                '''
+                    Path to the JSON file that stores your preferences. 
+                    
+                    Default is set to 'preferences/preferences.json'.
+                '''
         }
     }
 }
+'''
+    The dictionary **ARGUMENT** stores all arguments definitions. 
+'''
 # END

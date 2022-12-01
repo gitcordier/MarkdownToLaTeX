@@ -6,4 +6,4 @@
 # This is how we get the metadata:
 from markdowntolatex.metadata import *
 
-DEFAULT_PREFERENCES = 'preferences/preferences.json'
+DEFAULT_PATH_FOR_PREFERENCES = 'preferences/preferences.json'

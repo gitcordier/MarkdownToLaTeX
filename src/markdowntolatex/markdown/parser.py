@@ -1,7 +1,10 @@
 #-----------------------------------------------------------------------------#
 # parser.py                                                                   #
-# The Markdown parser.                                                        #
 #-----------------------------------------------------------------------------#
+# Description: 
+'''
+    The Markdown parser.
+'''
 from markdowntolatex.markdown.encoding import *
 from markdowntolatex.markdown.tree import *
 from markdowntolatex.utilities import *
@@ -141,8 +144,8 @@ class Parser():
             #
         elif self.state == 'IS READING TEXT':
             if read == LF:
-                if self.is_positive('backslash'):
-                    if self.is_even('backslash'):
+                if self.is_count_positive('backslash'):
+                    if self.is_count_even('backslash'):
                         n = int(self.count['backslash']/2)
                         prefix = self.latex('backslash', n)
                         if self.mode == 'latex':
@@ -157,7 +160,7 @@ class Parser():
                         suffix = self.latex('newline', line_break=True)
                     self.update_text(LF, prefix=prefix, suffix=suffix)
                     self.reset_count('backslash')
-                elif self.is_positive('space'):
+                elif self.is_count_positive('space'):
                     if self.count['space'] > 1:
                         suffix = self.latex('newline', line_break=True)
                         self.update_text(LF, suffix=suffix)
@@ -227,8 +230,9 @@ class Parser():
             new_array = [value]
         return new_array
     #
-
-    def __private__get_data_for_update(self, read, head=None, prefix=None, tail=None, suffix=None):
+    
+    def __private__get_data_for_update(self, read, head=None, prefix=None, 
+        tail=None, suffix=None):
         '''
             Given *read$, creates word made from **read**, prefix, suffix. 
 
@@ -250,7 +254,8 @@ class Parser():
         return subtree, new_prefix + [read] + new_suffix
     #
 
-    def update_heading(self, read, head=None, prefix=None, tail=None, suffix=None):
+    def update_heading(self, read, head=None, prefix=None, tail=None, 
+        suffix=None):
         '''
             Given *read**, updates the heading. 
 
@@ -268,7 +273,7 @@ class Parser():
         [subtree.update_heading(x) for x in array]
     #
 
-    def update_text(self, read, head=None, prefix=None, tail=None, suffix=None):
+    def update_text(self, read, head=None, prefix=None, tail=None,suffix=None):
         '''
             Given *read**, updates the text. 
 
@@ -330,7 +335,7 @@ class Parser():
         self.count[key] += n
     #
 
-    def is_positive(self, key):
+    def is_count_positive(self, key):
         '''
             :param: *key*, a key for the dictionary *count*.
             :type: str
@@ -343,7 +348,7 @@ class Parser():
         return is_positive(self.count[key])
     #
 
-    def is_even(self, key):
+    def is_count_even(self, key):
         '''
             :param: *key*, a key for the dictionary *count*.
             :type: str
@@ -356,7 +361,7 @@ class Parser():
         return is_positive(self.count[key])
     #
 
-    def is_odd(self, key):
+    def is_count_odd(self, key):
         '''
             :param: *key*, a key for the dictionary *count*.
             :type: str

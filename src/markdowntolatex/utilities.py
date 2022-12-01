@@ -9,11 +9,29 @@ from markdowntolatex.constants import NAME
 
 def get_file(name, *prefix, **kwargs):
     '''
-        TODO
+        Fetch a file *name* the from **package_data** folder (only).
+
+        :param name: The file's name.
+        :type name: str
+        :raise ModuleNotFoundError: If the package metadata do not mention the package name. 
+        :raise FileNotFoundError: If the folder **package_data** do not exist. 
+        :return: The desired file, as a string.
+        :rtype: str
     '''
-    package = importlib.resources.files(NAME.lower())
-    manager = importlib.resources.as_file(package) 
-    with manager as root:
+    # ModuleNotFoundError
+    try:
+        package = importlib.resources.files(NAME.lower())
+    except ModuleNotFoundError:
+        # IF troubble, then update NAME in metadata.py
+        raise ModuleNotFoundError(
+            '''
+                Call of get_file(nameof_file, ...) failed because 
+                the variable NAME in metadata.py does not expose 
+                the right name of the package. 
+            '''
+        )
+    #
+    with importlib.resources.as_file(package) as root:
         urlof_file = os.path.join(root, 'package_data', *prefix, name)
     #
     if 'mode' in kwargs and kwargs['mode'] in {'r', 'rb'}:
@@ -21,8 +39,16 @@ def get_file(name, *prefix, **kwargs):
     else:
         mode = 'rb'
     #
-    with open(urlof_file, mode) as f:
-        return f.read()
+    try:
+        with open(urlof_file, mode) as f:
+            return f.read()
+        #
+    except FileNotFoundError as e: 
+        e.errno = '''
+                Call of get_file(nameof_file, ...) failed because 
+                folder %s/src/%s/package_data does not exist.
+            '''%(NAME, NAME.lower())
+        raise e
     #
 #
 def is_integer(x):
