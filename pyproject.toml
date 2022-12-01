@@ -7,7 +7,6 @@ version = "0.0.1"
 authors = [
   { name="gitcordier", email="admin@gcordier.eu" },
 ]
-
 description = "Markdown to LaTeX"
 keywords=["LaTeX", "Markdown", "Markdown to LaTeX"]
 readme = "README.md"
