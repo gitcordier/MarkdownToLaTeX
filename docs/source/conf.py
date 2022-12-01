@@ -2,11 +2,13 @@
 #
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
+import os
 import sys
-# Path for package's src folder:
-# SRC = 
-sys.path.append(SRC)
-sys.path.append(SRC + 'markdowntolatex')
+from pathlib import Path
+
+folder_package = Path(__file__).resolve().parents[2]
+folder_src = os.path.join(folder_package, 'src')
+sys.path.append(folder_src)
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
