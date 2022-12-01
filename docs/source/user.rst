@@ -21,5 +21,15 @@ We now come to the
 .. automodule:: markdowntolatex.user.cli
    :members:
    :undoc-members:
+   :exclude-members: ARGUMENT
+
+.. autodata:: markdowntolatex.user.cli.ARGUMENT
+   :annotation:
+.. pprint:: markdowntolatex.user.cli.ARGUMENT
+
+
+
+
+
 
 

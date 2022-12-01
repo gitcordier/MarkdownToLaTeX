@@ -8,6 +8,7 @@ API
    markdown
    latex
    user
+   utilities
 
 
 
