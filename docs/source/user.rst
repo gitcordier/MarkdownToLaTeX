@@ -23,9 +23,7 @@ We now come to the
    :undoc-members:
    :exclude-members: ARGUMENT
 
-.. autodata:: markdowntolatex.user.cli.ARGUMENT
-   :annotation:
-.. pprint:: markdowntolatex.user.cli.ARGUMENT
+
 
 
 
