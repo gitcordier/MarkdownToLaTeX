@@ -18,11 +18,11 @@ class Parser():
         self.tree = None
         # TODO: unicode range
 
-        # Counts for backslash, hash, space. ---------------------------------#
+        # Counts for backslash, hash, space. --------------------------#
         # Kept into a dictionary;
         self.count = dict(zip(('backslash', 'hash', 'space'), [0]*3))
         self.mode = 'text'
-        # Counts for backslash, hash, space. END -----------------------------#
+        # Counts for backslash, hash, space. END ----------------------#
     #
     @staticmethod
     def is_regular_character(read):
@@ -34,13 +34,14 @@ class Parser():
     #
     @staticmethod
     def latex(command, card=1, line_break=False):
-    #----------------------------------------------------------------------#
         '''
             Given a LaTex command *command* and a cardinality *card*, 
-            returns the sequence *command* +  … + *command* (*card* time(s)).
+            returns the sequence *command* +  … + *command* 
+            (*card* time(s)).
 
             Optionally, appends n (n = 0, 1, 2, ...) line break(s) 
-            at the end of the sequence **iff** 'line_break' is set to n. 
+            at the end of the sequence **iff** 'line_break' 
+            is set to n. 
 
             Note that (1) *line_break=True* means *line_break=1*, 
             (2) *line_break=False* means *line_break=0*.
@@ -143,41 +144,73 @@ class Parser():
                 self.reset_count('space')
             #
         elif self.state == 'IS READING TEXT':
-            if read == LF:
-                if self.is_count_positive('backslash'):
-                    if self.is_count_even('backslash'):
-                        n = int(self.count['backslash']/2)
-                        prefix = self.latex('backslash', n)
-                        if self.mode == 'latex':
-                            pass
-                        else:
-                            prefix.insert(0, DOLLAR)
-                            prefix.append(DOLLAR)
-                        suffix = []
+            if read == LF: #-------------------------------------------#
+                # The last k (k>0) characters(s) were (is) all '\' .   #
+                if self.is_count_positive_even('backslash'):
+                    n = int(self.count['backslash']/2)
+                    prefix = self.latex('backslash', n)
+                    #
+                    if self.mode == 'AMSTeX':
+                        pass
                     else:
-                        n = int((self.count['backslash'] - 1) / 2)
-                        prefix = self.latex('backslash', n)
-                        suffix = self.latex('newline', line_break=True)
-                    self.update_text(LF, prefix=prefix, suffix=suffix)
-                    self.reset_count('backslash')
+                        prefix.insert(0, DOLLAR)
+                        prefix.append(DOLLAR)
+                        suffix = []
+                    #--------------------------------------------------#
+                    self.update_text(LF, prefix=prefix, suffix=suffix) #
+                    self.reset_count('backslash')                      #
+                    self.reset_count('hash')                           #
+                    self.reset_count('space')                          #
+                    #--------------------------------------------------#
+                elif self.is_count_positive_odd('backslash'):
+                    n = int((self.count['backslash'] - 1) / 2)
+                    prefix = self.latex('backslash', n)
+                    suffix = self.latex('newline', line_break=True)
+                    #
+                    if self.mode == 'AMSTeX':
+                        pass
+                    elif n > 0:
+                        prefix.insert(0, DOLLAR)
+                        prefix.append(DOLLAR)
+                    else: # n == 0:
+                        pass
+                    #--------------------------------------------------#
+                    self.update_text(LF, prefix=prefix, suffix=suffix)  
+                    self.reset_count('backslash')                      #
+                    self.reset_count('hash')                           #
+                    self.reset_count('space')                          #
+                    #--------------------------------------------------#
+                    # Case "backslash": END ---------------------------#
                 elif self.is_count_positive('space'):
                     if self.count['space'] > 1:
                         suffix = self.latex('newline', line_break=True)
                         self.update_text(LF, suffix=suffix)
                     else:
-                        pass
+                        self.update_text(LF)
+                        #self.reset_count('backslash')
+                        #self.reset_count('hash')
                     self.reset_count('space')
                 #
                 self.set_state('ANYTHING')
+            # CASE read == LF: END ------------------------------------#
             elif read == SPACE:
-                self.update_text(SPACE)
-                self.count['space'] == 1
+                self.update_count('space')
             elif read == BACKSLASH:
-                self.count['backslash'] += 1
-            elif read == HASH:  # TODO
-                if self.backslash == 1:
+                self.update_count('backslash')
+            elif read == HASH:  
+                if self.count['backslash'] < 2:
                     self.update_text(read, head=BACKSLASH)
-                    self.backslash = 0
+                    self.reset_count('backslash')
+                else: # Read sequence: \ ...\\#
+                    n = int(self.count['backslash'] / 2)
+                    prefix = self.latex('backslash', n)
+                    prefix.insert(0, DOLLAR)
+                    prefix.append(DOLLAR)
+                    prefix.append(BACKSLASH)
+                    #
+                    self.update_text(read, prefix=prefix)
+                    self.reset_count('backslash')
+                # read == HASH: END -----------------------------------#
             elif read == ASTERISK:  # TODO
                 self.update_text(ASTERISK)
             elif read == DOLLAR:
@@ -308,7 +341,10 @@ class Parser():
             self.tree.add_branch(self.level, node)
         #
     #
-
+    
+    def set_count(self, key, n):
+        self.count[key] = n
+    #
     def reset_count(self, key):
         '''
             Resets self.count[*key*] to 0.
@@ -358,7 +394,7 @@ class Parser():
 
             TODO: Implement exceptions management.
         '''
-        return is_positive(self.count[key])
+        return is_even(self.count[key])
     #
 
     def is_count_odd(self, key):
@@ -372,6 +408,31 @@ class Parser():
             TODO: Implement exceptions management.
         '''
         return is_odd(self.count[key])
+    #
+    
+    def is_count_positive_even(self, key):
+        '''
+            :param: *key*, a key for the dictionary *count*.
+            :type: str
+            :return: **True** iff self.count[*key*] is positive even.
+            :rtype: Boolean
+            :raise: **TypeError** iff self.count[*key*] is not an integer.
+
+            TODO: Implement exceptions management.
+        '''
+        return is_positive_even(self.count[key])
+    #
+    def is_count_positive_odd(self, key):
+        '''
+            :param: *key*, a key for the dictionary *count*.
+            :type: str
+            :return: **True** iff self.count[*key*] is positive even.
+            :rtype: Boolean
+            :raise: **TypeError** iff self.count[*key*] is not an integer.
+
+            TODO: Implement exceptions management.
+        '''
+        return is_positive_odd(self.count[key])
     #
 
     def update_mode(self, mode=None):
