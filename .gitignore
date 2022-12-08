@@ -70,12 +70,14 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/
 
 # PyBuilder
 target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb*
 
 # IPython
 profile_default/
@@ -127,10 +129,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-
-# Jupyter
-*.ipynb*
-
 
 # OS files (from MacOS, Windows)
 .DS_Store
