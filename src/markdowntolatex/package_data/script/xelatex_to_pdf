@@ -1,0 +1,14 @@
+name=%s
+folder=%s
+folder_pdf=$folder/output/pdf
+folder_xelatex=$folder/output/xelatex
+mkdir $folder_pdf
+cd $folder_xelatex
+xelatex DM.tex > log
+rm log
+cp DM.pdf $folder_pdf/$name.pdf
+cd $folder
+echo "Markdown file was parsed, LaTeX source code was put in output/xelatex.
+Moreover, the compilation worked well: $name.pdf was created from the LaTeX \
+source code then copied in output/source/pdf.\n\
+MarkdownToLaTeX: End."
