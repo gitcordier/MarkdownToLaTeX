@@ -1,0 +1,15 @@
+{
+    "import markdown": "False",
+    "author": "Alan Berliner",
+    "email": "adminrandomemail@github.com",
+    "name": "An Example Document",
+    "document class":{
+        "class": "article",
+        "size": "11 pt",
+        "paper": "a4paper"
+    },
+    "main font": {
+        "name": "CMU Serif",
+        "alias": "CMU"
+    }
+}
