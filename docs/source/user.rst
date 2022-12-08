@@ -3,7 +3,7 @@ User
 
 The **User** package is dedicated to interaction with the user.
 It provides a command line interface (CLI) implementation and 
-a record that keep track of the user's choices.
+a record that keeps track of the user's choices.
 
 .. autosummary::
    :toctree: generated
