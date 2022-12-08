@@ -1,6 +1,6 @@
 % a4paper = ISO 216 standard. 
 % Don't forget to revert to default if you want the US Letter instead.
-\documentclass[a4paper,11pt,titlepage,openany, leqno]{article}
+\documentclass[MarkdownToLaTeX:paper,MarkdownToLaTeX:size,titlepage,openany,leqno]{MarkdownToLaTeX:class}
 
 %: MATH PACKAGE USED
 %\usepackage{graphicx}
@@ -55,7 +55,7 @@ tikz
 
 % FONTS: PERSONNAL CHOICE- CAN BE CHANGED!
 \newfontfamily{\CMUCS}{CMU Classical Serif}
-\newfontfamily{\CMU}{CMU Serif}
+\newfontfamily{\MarkdownToLaTeX:mainfontalias}{MarkdownToLaTeX:mainfontname}
 \newfontfamily{\CMUSS}{CMU Sans Serif}
 \newfontfamily{\fw}{CMU Typewriter Text Light}
 %\newfontfamily{\Arabic}{Al Bayan}
@@ -64,7 +64,7 @@ tikz
 % Alternatively, for all Unix systems:
 %\newfontfamily{\Didot}{Theano Didot}
 %\usepackage{mathspec}
-\def\mainfont{CMU Serif}
+\def\mainfont{MarkdownToLaTeX:mainfontname}
 \setmainfont{\mainfont}
 
 \setmathfont(Latin)[Uppercase=Regular,Lowercase=Regular]{\mainfont}
@@ -146,10 +146,12 @@ tikz
 
 % Arithmetics
 \newcommand{\ceil}[1]{\lceil #1 \rceilf}
+
 % Analysis
 \newcommand\magnitude[1]{\left\lvert\, #1 \,\right\rvert}
 \renewcommand{\norm}[2]{\| \,#2 \, \|_{#1}}
 \def\weakstar{\text{weak}^\ast\text{-}}
+
 % Topology
 \newcommand{\localbase}[1]{\mathscr #1}
 
@@ -196,13 +198,15 @@ tikz
 \def\ddy{{\function{decay}}}
 
 %--------------END OF PRIMITIVES--------------------------------
-\def\ROOT{ ROOT IS DEFINED HERE}
-\def\TITLE{
-  TITLE IS DEFINED HERE
-}
-\def\EMAIL{}
-\def\AUTHOR{gitcordier}
+\def\ROOT{MarkdownToLaTeX:root}
+\def\TITLE{MarkdownToLaTeX:title}
+\def\EMAIL{MarkdownToLaTeX:email}
+\def\AUTHOR{MarkdownToLaTeX:author}
 
+% No indent
+\setlength\parindent{0pt}
+%--------------END OF PRIMITIVES--------------------------------
+%--------------DOCUMENT: BEGINNING------------------------------
 \begin{document}
 %\begin{abstract}
 %    \input{\ROOT/abstract.tex}
@@ -245,3 +249,4 @@ tikz
 
 
 %Made on \XeTeX
+%--------------DOCUMENT: END------------------------------------
