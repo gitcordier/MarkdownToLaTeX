@@ -6,7 +6,7 @@
     Command line interface definition. 
     A dictionary **ARGUMENT** stores all arguments definitions. 
 '''
-from markdowntolatex.constants import DEFAULT_PATH_FOR_PREFERENCES
+
 
 
 MAX_NUMBEROF_INPUTS = 3 
@@ -18,7 +18,7 @@ MAX_NUMBEROF_INPUTS = 3
 
 ARGUMENT = {
     'help': {
-        'flags': ['-h', '--help'], # Don't use
+        'flags': ['-h', '--help'], # Don't use.
         'parameters for CLI':{
             'dest': 'help',
             'nargs': '?',
@@ -34,7 +34,7 @@ ARGUMENT = {
             'dest': 'version',
             'nargs': '?',
             'const': True,
-            'default': False, # If 'version' not present.
+            'default': False, # If no flag for version'.
             'help': 
                 '''
                     Package version, following the usual 
@@ -48,8 +48,8 @@ ARGUMENT = {
         'parameters for CLI':{
             'nargs':'?', 
             'dest': 'preferences', 
-            'const': DEFAULT_PATH_FOR_PREFERENCES, 
-            'default': DEFAULT_PATH_FOR_PREFERENCES, # If no 'preferences'
+            'const': 'none', # If flag but no value.
+            'default': 'none', # If no flag.
             'metavar': 'JSON file',
             'help': 
                 '''
