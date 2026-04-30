@@ -1,8 +1,9 @@
 {
+    "import markdown": "False",
     "author": "Alan Berliner",
     "email": "adminrandomemail@github.com",
     "name": "An Example Document",
-    "document class":{
+    "document class": {
         "class": "article",
         "size": "11 pt",
         "paper": "a4paper"
