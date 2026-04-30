@@ -39,7 +39,7 @@ ARGUMENT = {
                 '''
                     Package version, following the usual 
                     “major.minor.micro” scheme 
-                    (1.1.1, 1.2.3, 3.2.1, and so on).
+                    (1.1.1, 1.3.0, 3.2.1, and so on).
                 '''
         }
     },
