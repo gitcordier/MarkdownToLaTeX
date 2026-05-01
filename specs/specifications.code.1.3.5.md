@@ -4,6 +4,34 @@
 
 1.3.0
 
+## Conventions
+
+### Scope: global
+
+#### Sourcecode
+
+- encoding: UTF-8
+- EOL: \n
+
+### TLA
+
+#### Sourcecode
+
+- width: excactly 80 (last character for EOL)
+
+### Python
+
+#### Sourcecode
+
+- width: excactly 128 (last character for EOL)
+
+### LaTex
+
+#### Sourcecode
+
+- width: excactly 128 (last character for EOL)
+
+
 ## Package Layout
 
 ```
