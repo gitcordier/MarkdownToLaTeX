@@ -1,9 +1,0 @@
-2026.04.30
-specs: check if there is a preferences.json file in the User's directory. Pretty simple, isn't it? 
-Yes, this is why I want everything to be perfect with this step. 
-
-tla file created by Claude from my specs. Not entirely satisfying: 
-- deadlocks
-- "never enabled" warnings
-- Some "interesting obligations" are not resolved. 
-
