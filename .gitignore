@@ -136,3 +136,4 @@ thumbs.db
 # Specific to project
 specs/docs/*
 specs/notes.txt
+specs/documentation/*
