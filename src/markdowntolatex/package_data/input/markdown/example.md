@@ -1,4 +1,0 @@
-# TITLE
-## SECTION
-### SUBSECTION
-Hello \LaTeX!

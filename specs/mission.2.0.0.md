@@ -2,7 +2,7 @@
 
 ## Version
 
-1.3.0
+2.0.0
 
 ## Introduction
 
@@ -66,7 +66,7 @@ When my idea is bad, say it.
 
 Includes figures, diagrams, tables to back your written reasonings. Group them then export them as a lualatex file I can compile.
 
-Use latex tikz when relevant. 
+Use latex tikz when relevant.
 
 ### Natural language for exchanges
 

@@ -2,7 +2,7 @@
 
 ## Version
 
-1.3.0
+2.0.0
 
 # subject
 
@@ -12,7 +12,7 @@ Project MarkdownToLaTeX, said  "the Project".
 
 the symbol * is the bash wildcard.
 
-$ is bash prefix for variable evaluation
+$ is the bash symbol for variable evaluation
 
 ## Directory Files: content and reading order
 

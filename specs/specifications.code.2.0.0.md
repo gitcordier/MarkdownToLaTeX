@@ -2,7 +2,7 @@
 
 ## Version
 
-1.3.0
+2.0.0
 
 ## Conventions
 
@@ -12,25 +12,37 @@
 
 - encoding: UTF-8
 - EOL: \n
+- indentation: space
 
 ### TLA
 
 #### Sourcecode
 
-- width: excactly 80 (last character for EOL)
+- width: exactly 80 (last character for EOL)
+- indentation: 2-space
 
 ### Python
 
+-width: exactly 95 (last character for EOL)
+-aesthetic convention: loops, if-elif statements must be closed with "#". Files are ended by a "# END" line (EOL-terminated).
+
 #### Sourcecode
 
-- width: excactly 128 (last character for EOL)
+- width: exactly 128 (last character for EOL)
+- indentation: 4-space
+- Sphinx documentation: Text must be indended (4-space shift with respect to opening and closing """), so that VSCode wraps it. Here is an example of comment:
+
+  """
+      EOL and 4-space shift. 
+      For each line.
+  """
 
 ### LaTex
 
 #### Sourcecode
 
 - width: excactly 128 (last character for EOL)
-
+- indentation: 2-space
 
 ## Package Layout
 

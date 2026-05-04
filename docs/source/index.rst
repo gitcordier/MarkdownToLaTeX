@@ -1,16 +1,39 @@
-.. packaging_tutorial documentation master file, created by
-   sphinx-quickstart on Thu Nov 24 12:23:50 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to MarkdownToLaTeX's documentation!
-==============================================
+MarkdownToLaTeX
+===============
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: User guide
 
+   installation
+   quickstart
 
+.. toctree::
+   :maxdepth: 2
+   :caption: API reference
+
+   api/workspace
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Formal methods
+
+   formal
+
+MarkdownToLaTeX translates Markdown source files into a LaTeX master
+document and compiles the result to PDF with LuaLaTeX:
+
+.. code-block:: text
+
+   Markdown  →  LaTeX  →  PDF
+
+It ships as a Python package (Python ≥ 3.14, no third-party runtime
+dependencies) and as a command-line binary.
+
+.. rubric:: Indices
+
+* :ref:`genindex`
+* :ref:`modindex`
 
 Indices and tables
 ==================
@@ -18,11 +41,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-Contents
---------
-
-.. toctree::
-
-   usage
-   API

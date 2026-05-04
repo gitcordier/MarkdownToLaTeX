@@ -1,6 +1,6 @@
-#-----------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------#
 # choice.py
-#-----------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------#
 # Description:
 '''
     Choice is an abstraction for the User's choice.
@@ -47,7 +47,7 @@ class Choice(dict):
         which is the **Choice** instance itself.
     '''
     def __init__(self):
-        # Let's instantiate the parser: --------------------------------------#
+        # Let's instantiate the parser: ------------------------------------------------------#
         parser = argparse.ArgumentParser(description='Markdown to LaTeX.')
 
         # Custom help option
@@ -83,7 +83,7 @@ class Choice(dict):
         if self['preferences'].lower() == 'none': 
             self['preferences'] = None
         #
-    # Init: END --------------------------------------------------------------#
+    # Init: END ------------------------------------------------------------------------------#
     def markdown_to_latex(self):
         print(self)
         if self['version'] == False:

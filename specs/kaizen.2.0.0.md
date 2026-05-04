@@ -2,7 +2,7 @@
 
 ## Version
 
-1.3.0
+2.0.0
 
 ## subject
 
@@ -18,8 +18,6 @@ What User expects, what MarkdownToLaTeX 1.0.0 must do.
 
 TLA+ modules: states, actions, invariant, fairness.
 
-### Properties
-
 Machine-checked theorems (TLAPS, Isabelle from the TLA Toolbox)
 
 ### Python implementationn
@@ -32,9 +30,9 @@ The only thing that actually matters.
 
 ## Elementary Kaizen step.
 
-Update User's intent
-Update specifications
-Update properties
-Update Python implementation: if outputs documentation as a pdf (PDF), then save it.
-Update Sphinx Documentation
-Evaluate PDF (if any).
+1. Update User's intent
+2. Update fonctional specifications
+3. Update formal specifications
+4. Update Python implementation: if outputs documentation as a pdf (PDF), then save it.
+5. Update Sphinx Documentation
+6. Evaluate PDF (if any).
