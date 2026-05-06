@@ -1,6 +1,6 @@
 #---------------------------------------------------------------------------------------------#
 # workspace.py                                                                                #
-# Abstraction for the User's worksspace.                                                      #
+# Abstraction for the User's workspace.                                                      #
 #---------------------------------------------------------------------------------------------#
 """
     Workspace readiness check for MarkdownToLaTeX 1.0.0.
@@ -57,7 +57,7 @@ class Workspace:
         self.path      = Path.cwd() if path is None else path
         self.pref_dir  = self.path / "preferences"
         self.pref_file = self.pref_dir / "preferences.json"
-        self.pref_dict: dict = {}
+        self.pref_dict = {}
 
     def load_preferences(self) -> Workspace:
         """
