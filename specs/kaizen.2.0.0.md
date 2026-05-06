@@ -22,7 +22,7 @@ Machine-checked theorems (TLAPS, Isabelle from the TLA Toolbox)
 
 ### Python implementationn
 
-See specifications.code.1.3.0.md
+See specifications.code.2.0.0.md
 
 ### User running pip install MarkdownToLaTeX
 

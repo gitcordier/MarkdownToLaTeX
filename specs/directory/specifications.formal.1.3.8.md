@@ -29,7 +29,7 @@ at the file-system layer:
 
 1. `is_dir`: `DIR` exists and is a directory;
 2. `has_preferences_dir`: `DIR/preferences` exists and is a directory;
-3. `has_JSON_preferences`: `DIR/preferences/preferences.json` exists and
+3. `has_INI_preferences`: `DIR/preferences/preferences.ini` exists and
    is a regular file.
 
 The answer is one of two **terminal verdicts**:
@@ -47,7 +47,7 @@ i.e. the procedure is **deterministic** at every reachable state (the
 verdicts are mutually exclusive) and **total** at every halt state (one
 of the two verdicts holds).
 
-Validation of the JSON *content* (schema keys, legal value of
+Validation of the INI *content* (schema keys, legal value of
 `"document class"`, etc.) is **out of scope** for this iteration. It is
 deferred to a later kaizen step. This is the only material reduction in
 scope from `specifications.formal.1.3.0.md`, which carried nine checks.
@@ -93,7 +93,7 @@ firing once a failure has occurred.
 | - | ------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------ |
 | 1 | `is_dir`               | `NothingHasBeenChecked /\ NothingHasBeenDisproved`                     | `DIR` is a directory                                 |
 | 2 | `has_preferences_dir`  | `hasBeenChecked(1) /\ hasNotBeenChecked(2) /\ ND`                      | `DIR/preferences` is a directory                     |
-| 3 | `has_JSON_preferences` | `hasBeenChecked(1) /\ hasBeenChecked(2) /\ hasNotBeenChecked(3) /\ ND` | `DIR/preferences/preferences.json` is a regular file |
+| 3 | `has_INI_preferences` | `hasBeenChecked(1) /\ hasBeenChecked(2) /\ hasNotBeenChecked(3) /\ ND` | `DIR/preferences/preferences.ini` is a regular file |
 
 `ND` abbreviates `NothingHasBeenDisproved` in the guards above. This
 clause is what closes the chain after the first failure: once any flag
@@ -244,7 +244,7 @@ mapping is one-to-one and reduces from nine entries (in 1.3.0) to three:
 | --------------------------------------------------------- | ------------------------------------------------------------- |
 | `NextHasDir` / `NextHasNoDir`                         | `is_directory(DIR)`                                         |
 | `NextHasPreferencesDir` / `NextHasNoPreferencesDir`   | `is_directory(DIR / "preferences")`                         |
-| `NextHasJsonPreferences` / `NextHasNoJsonPreferences` | `is_regular_file(DIR / "preferences" / "preferences.json")` |
+| `NextHasJsonPreferences` / `NextHasNoJsonPreferences` | `is_regular_file(DIR / "preferences" / "preferences.ini")` |
 
 The TLA+ verdicts map to a Python enum with two members; the User-facing
 behavior of `OK` is "proceed", and of `NOT_OK` is "raise a single,
@@ -256,7 +256,7 @@ the decision retiring `is_error`.
 
 ## 8. Out of scope and open follow-ups
 
-1. **JSON content validation.** Schema keys (`"author"`, `"email"`,
+1. **INI content validation.** Schema keys (`"author"`, `"email"`,
    `"name"`, `"main font"`, `"document class"`) and legality of the
    value at `"document class"` are deferred. Adding them is a second
    linear chain of six steps grafted on after step 3, with the same
@@ -270,7 +270,7 @@ the decision retiring `is_error`.
    directory-readiness contract is honored by the implementation.
 4. **PROJECT file and `input/markdown/` checks** (Feature 5 in
    `scopeStatement_1_2_0.md`). These are the next layers of the chain
-   beyond the JSON content validation.
+   beyond the INI content validation.
 
 ---
 

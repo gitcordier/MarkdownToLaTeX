@@ -2,7 +2,7 @@
 
 ## Version
 
-2.0.0
+2.0.1
 
 ## Conventions
 
@@ -14,27 +14,33 @@
 - EOL: \n
 - indentation: space
 
+### Markdown
+
+#### Sourcecode
+
+- width: exactly 96 (last character for EOL)
+- indentation: 4-space
+
+
 ### TLA
 
 #### Sourcecode
 
-- width: exactly 80 (last character for EOL)
+- width: exactly 96 (last character for EOL)
 - indentation: 2-space
 
 ### Python
 
--width: exactly 95 (last character for EOL)
--aesthetic convention: loops, if-elif statements must be closed with "#". Files are ended by a "# END" line (EOL-terminated).
-
 #### Sourcecode
 
-- width: exactly 128 (last character for EOL)
+- width: exactly 96 (last character for EOL)
 - indentation: 4-space
+- aesthetic convention: loops, if-elif statements must be closed with "#". Files are ended by a "# END" line (EOL-terminated).
 - Sphinx documentation: Text must be indended (4-space shift with respect to opening and closing """), so that VSCode wraps it. Here is an example of comment:
 
   """
-      EOL and 4-space shift. 
-      For each line.
+  EOL and 4-space shift.
+  For each line.
   """
 
 ### LaTex
@@ -72,7 +78,7 @@ src/markdowntolatex/
 │       │   └── template.md  # template
 │       ├── latex/           # Consumed by component LATEX  
 │       └── preferences/     # Default preferences
-│           └── preferences.json   # Default JSON preferences file.
+│           └── preferences.ini   # Default preferences file.
 │
 ├── user/                    # Abstraction for the User's
 │   ├── __init__.py
