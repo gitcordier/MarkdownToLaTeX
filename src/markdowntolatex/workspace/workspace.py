@@ -1,16 +1,15 @@
 #---------------------------------------------------------------------------------------------#
 # workspace.py                                                                                #
-# Abstraction for the User's workspace.                                                      #
+# Abstraction for the User's workspace.                                                       #
 #---------------------------------------------------------------------------------------------#
 """
     Workspace readiness check for MarkdownToLaTeX 1.0.0.
 
-    Implements Directory.1.3.7.tla. The User's working directory DIR is
-    *ready* iff:
+    Implements Directory.1.3.8.tla. The User's working directory DIR is *ready* iff:
 
     1. DIR is a directory,
     2. DIR/preferences is a directory,
-    3. DIR/preferences/preferences.json is a regular file.
+    3. DIR/preferences/preferences.ini is a regular file.
 """
 from __future__ import annotations
 
@@ -35,7 +34,7 @@ class Workspace:
         """
         IS_DIR               = "is_dir"
         HAS_PREFERENCES_DIR  = "has_preferences_dir"
-        HAS_JSON_PREFERENCES = "has_JSON_preferences"
+        HAS_INI_PREFERENCES  = "has_INI_preferences"
 
     class Error(Exception):
         """
@@ -56,7 +55,7 @@ class Workspace:
     def __init__(self, path: Path | None = None) -> None:
         self.path      = Path.cwd() if path is None else path
         self.pref_dir  = self.path / "preferences"
-        self.pref_file = self.pref_dir / "preferences.json"
+        self.pref_file = self.pref_dir / "preferences.ini"
         self.pref_dict = {}
 
     def load_preferences(self) -> Workspace:
@@ -78,7 +77,7 @@ class Workspace:
                     Workspace.Check.HAS_PREFERENCES_DIR, self.pref_dir) from e
             elif not self.pref_file.is_file():
                 raise Workspace.Error(
-                    Workspace.Check.HAS_JSON_PREFERENCES, self.pref_file) from e
+                    Workspace.Check.HAS_INI_PREFERENCES, self.pref_file) from e
             else:
                 # All three re-checks passed: the file came back during
                 # the diagnostic. Re-raise the original error.
