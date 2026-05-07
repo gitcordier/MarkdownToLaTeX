@@ -138,4 +138,5 @@ specs/docs/*
 specs/notes.txt
 specs/documentation/*
 *.pdf
+*.zip
 .vscode*
