@@ -140,3 +140,4 @@ specs/documentation/*
 *.pdf
 *.zip
 .vscode*
+export*.sh
