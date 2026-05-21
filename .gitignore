@@ -141,4 +141,4 @@ specs/documentation/*
 *.zip
 .vscode*
 export*.sh
-/Users/gcordier/repo/MarkdownToLaTeX/specs/TLA/MarkdownToLaTeX/*tlaps
+*tlaps/*
