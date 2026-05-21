@@ -141,4 +141,5 @@ specs/documentation/*
 *.zip
 .vscode*
 export*.sh
-*tlaps/*
+*.tlaps*
+*.toolbox
