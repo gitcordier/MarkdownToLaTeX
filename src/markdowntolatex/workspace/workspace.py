@@ -5,83 +5,116 @@
 """
     Workspace readiness check for MarkdownToLaTeX 1.0.0.
 
-    Implements Directory.1.3.8.tla. The User's working directory DIR is *ready* iff:
+    This module provides :class:`Workspace`, a stateful abstraction over the User's
+    working directory ``DIR``. The readiness chain is the Python realization of the
+    formal specification ``Directory.tla``: ``DIR`` is *ready* iff
 
-    1. DIR is a directory,
-    2. DIR/preferences is a directory,
-    3. DIR/preferences/preferences.ini is a regular file.
+    1. ``DIR/preferences`` is a directory, and
+    2. ``DIR/preferences/preferences.ini`` is a regular file.
+
+    Each call to :meth:`Workspace.load_preferences` runs the state machine from
+    ``InitDirectory`` to one terminal state. ``AllProved`` reaches normal return; the
+    other two terminal states raise :exc:`Workspace.Error` with the matching
+    :class:`Prove` verdict.
+
+    Note:
+        ``DIR`` is :func:`pathlib.Path.cwd`. The precondition "``DIR`` exists and is
+        a directory" is discharged by the OS for the current working directory and
+        is therefore not modeled in ``Directory.tla``.
 """
-from __future__ import annotations
-
-import json
+from __future__ import annotations 
 from enum import Enum
 from pathlib import Path
+from user.preferences import load
+
+
+class Verdict(Enum):
+    """
+        Failure verdicts of the workspace readiness chain.
+
+        Each member names one terminal state of ``Directory.tla`` that maps to a
+        :exc:`Workspace.Error`. The third terminal state (``AllProved``) is the
+        success path and is not represented here.
+
+        Attributes:
+            NO_FILE__HAS_SUBDIR: the preferences subdirectory exists, but the
+                ``preferences.ini`` file inside it does not. TLA terminal:
+                ``{has_preferences_file: disproved, has_preferences_subd: proven}``.
+            NO_FILE__NO_SUBDIR: neither the preferences subdirectory nor the file
+                exists. TLA terminal: ``AllDisproved``.
+    """
+    NO_FILE__HAS_SUBDIR = "no preferences file, has preferences subdirectory"
+    NO_FILE__NO_SUBDIR  = "no preferences file, no preferences subdirectory"
 
 
 class Workspace:
     """
-        Stateful abstraction for the User's working directory.
+        Stateful abstraction over the User's working directory.
 
-        Args:
-            path: the working directory. Defaults to :func:`pathlib.Path.cwd`.
+        On construction, :class:`Workspace` derives the canonical paths under
+        :func:`pathlib.Path.cwd` but performs no disk I/O. Preferences are loaded
+        only when :meth:`load_preferences` is called.
+
+        Attributes:
+            path (:class:`pathlib.Path`): the working directory; ``Path.cwd()``.
+            pref_subd (:class:`pathlib.Path`): ``path / "preferences"``.
+            pref_file (:class:`pathlib.Path`): ``pref_subd / "preferences.ini"``.
+            pref_dict (dict): preferences loaded from :attr:`pref_file`. Empty
+                until :meth:`load_preferences` succeeds.
+
+        Example:
+            >>> ws = Workspace().load_preferences()
+            >>> ws.pref_dict["author"]
+            'Alan Berliner'
     """
-
-    class Check(Enum):
-        """
-            The three steps of the readiness chain.
-
-            The value of each member is the corresponding TLA+ flag name.
-        """
-        IS_DIR               = "is_dir"
-        HAS_PREFERENCES_DIR  = "has_preferences_dir"
-        HAS_INI_PREFERENCES  = "has_INI_preferences"
 
     class Error(Exception):
         """
-            Raised when DIR fails the readiness chain.
-
-            Attributes:
-                step: the Workspace.Check at which the chain failed.
-                path: the file-system path that was checked.
+            Raised when the working directory fails the readiness chain.
         """
-        def __init__(self, step: Workspace.Check, path: Path) -> None:
-            self.step = step
-            self.path = path
-            super().__init__(
-                f"workspace not ready: {self.step.value} failed.\n"
-                f"Could not find {self.path}"
-            )
+        msg = Template("workspace not ready: $step failed.\nCould not find $path")
 
-    def __init__(self, path: Path | None = None) -> None:
-        self.path      = Path.cwd() if path is None else path
-        self.pref_dir  = self.path / "preferences"
-        self.pref_file = self.pref_dir / "preferences.ini"
+        def __init__(self, step: Prove, path: Path) -> None:         
+            super().__init__(self.msg.substitute(step=step.value, path=path))
+        #
+    # END: nested class Error
+
+    def __init__(self) -> None:
+        self.path      = Path.cwd()
+        self.pref_subd = self.path / "preferences"
+        self.pref_file = self.pref_subd / "preferences.ini"
         self.pref_dict = {}
 
     def load_preferences(self) -> Workspace:
         """
-            Load preferences from disk into self.pref_dict.
+            Run the readiness chain and load preferences from disk.
+
+            The chain mirrors ``Directory.tla``: opening :attr:`pref_file` is the
+            ``NextFile`` action; an :exc:`OSError` raised by ``open`` enters
+            ``NextNoFile``; the subsequent :meth:`pathlib.Path.is_dir` check on
+            :attr:`pref_subd` dispatches between ``NextNoFileHasDir`` and
+            ``NextNoFileNoDir``.
+
+            On success, :attr:`pref_dict` is populated by
+            :func:`user.preferences.load`.
+
+            Returns:
+                :class:`Workspace`: ``self``, for method chaining.
 
             Raises:
-                Workspace.Error: if any step of the readiness chain fails.
+                Workspace.Error: with :attr:`Prove.NO_FILE__HAS_SUBDIR` if the
+                    subdirectory exists but the file does not; with
+                    :attr:`Prove.NO_FILE__NO_SUBDIR` if the subdirectory is absent.
         """
         try:
             with open(self.pref_file, "r", encoding="utf-8") as f:
-                self.pref_dict |= json.load(f)
-        except OSError as e:
-            if not self.path.is_dir():
-                raise Workspace.Error(
-                    Workspace.Check.IS_DIR, self.path) from e
-            elif not self.pref_dir.is_dir():
-                raise Workspace.Error(
-                    Workspace.Check.HAS_PREFERENCES_DIR, self.pref_dir) from e
-            elif not self.pref_file.is_file():
-                raise Workspace.Error(
-                    Workspace.Check.HAS_INI_PREFERENCES, self.pref_file) from e
-            else:
-                # All three re-checks passed: the file came back during
-                # the diagnostic. Re-raise the original error.
-                raise
+                self.pref_dict = load(f)             # NextFile
+        except OSError as no_file:                   # NextNoFile
+            if self.pref_subd.is_dir():              # NextNoFileHasDir
+                raise Workspace.Error(Prove.NO_FILE__HAS_SUBDIR, self.pref_file) from no_file
+            else:                                    # NextNoFileNoDir
+                raise Workspace.Error(Prove.NO_FILE__NO_SUBDIR, self.pref_subd) from no_file
+            #
         return self
-    #
+    # END: load_preferences, class Workspace
 # END

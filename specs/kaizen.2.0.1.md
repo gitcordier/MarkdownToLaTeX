@@ -2,7 +2,7 @@
 
 ## Version
 
-2.0.0
+2.0.1
 
 ## subject
 
@@ -22,7 +22,7 @@ Machine-checked theorems (TLAPS, Isabelle from the TLA Toolbox)
 
 ### Python implementationn
 
-See specifications.code.2.0.0.md
+See specifications.code.2.0.1.md
 
 ### User running pip install MarkdownToLaTeX
 

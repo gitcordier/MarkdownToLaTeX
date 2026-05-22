@@ -50,12 +50,12 @@ theorem of the spec.
 
 ## Acceptance contract
 
-Two MUST constraints from `nextStep.2.0.0.md`:
+Two MUST constraints 
 
-| label | constraint | meaning |
-|---|---|---|
-| C1 | `user_preferences_keys ⊆ LUALATEX` | every supplied key is recognized. |
-| C2 | `LUALATEX_CORE ⊆ user_preferences_keys` | every mandatory key is supplied. |
+| label | constraint                                 | meaning                           |
+| ----- | ------------------------------------------ | --------------------------------- |
+| C1    | `user_preferences_keys ⊆ LUALATEX`      | every supplied key is recognized. |
+| C2    | `LUALATEX_CORE ⊆ user_preferences_keys` | every mandatory key is supplied.  |
 
 These form the predicate `criterion(S)`. Two invariants are asserted:
 
@@ -78,10 +78,10 @@ Three states; two actions:
 
     init  --Validate-->  accepted | rejected  --Done-->  (stutters)
 
-| action | from | to | role |
-|---|---|---|---|
+| action       | from     | to                           | role                                                             |
+| ------------ | -------- | ---------------------------- | ---------------------------------------------------------------- |
 | `Validate` | `init` | `accepted` or `rejected` | non-deterministically loads a key set, then decides in one step. |
-| `Done` | terminal | terminal | stutter, prevents TLC deadlock at terminal states. |
+| `Done`     | terminal | terminal                     | stutter, prevents TLC deadlock at terminal states.               |
 
 `Validate` has `Init` as its guard, so it fires at most once. After it fires,
 `state /= "init"`, `Init` is false, and `Validate` is permanently disabled.
@@ -150,13 +150,13 @@ a leaf step or nominating the backend explicitly (e.g. `BY SMT DEF …`).
 
 ## Map to the Python implementation (forthcoming)
 
-| TLA+ artifact | Python counterpart |
-|---|---|
-| `state` variable | `enum PreferencesState { INIT, ACCEPTED, REJECTED }` |
-| `user_preferences_keys` | `set(user_preference_.keys())` |
-| `Validate` action | INI parse + `if criterion(keys): … else: …` in one call |
-| `criterion(S)` | a pure validator function on `set[str]` |
-| `LUALATEX*` constants | module-level `frozenset`s, loaded from the `.txt` record |
+| TLA+ artifact             | Python counterpart                                           |
+| ------------------------- | ------------------------------------------------------------ |
+| `state` variable        | `enum PreferencesState { INIT, ACCEPTED, REJECTED }`       |
+| `user_preferences_keys` | `set(user_preference_.keys())`                             |
+| `Validate` action       | INI parse +`if criterion(keys): … else: …` in one call   |
+| `criterion(S)`          | a pure validator function on `set[str]`                    |
+| `LUALATEX*` constants   | module-level `frozenset`s, loaded from the `.txt` record |
 
 ## Open items for the next step
 
@@ -170,5 +170,5 @@ a leaf step or nominating the backend explicitly (e.g. `BY SMT DEF …`).
 
 - `Preferences.tla`
 - `specifications.functional.latex.keys.2.0.0.txt`
-- `nextStep.2.0.0.md`
-- `kaizen.2.0.0.md` (update formal specifications)
+- `nextStep.2.0.1.md`
+- `kaizen.2.0.1.md` (update formal specifications)

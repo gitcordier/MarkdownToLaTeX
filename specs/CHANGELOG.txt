@@ -1,6 +1,6 @@
 # CHANGELOG 
 # the symbol * is the bash wildcard.
-# The files below were created. Read it
+# The files below were created. Read them
 README.*md
 mission.*.md
 kaizen.*.md
@@ -8,3 +8,5 @@ scopeStatement.*.md
 nextStep.*.md
 specifications.functional.*
 specifications.code.*
+specifications.formal.*
+*.tla

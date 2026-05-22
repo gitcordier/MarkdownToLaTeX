@@ -2,7 +2,7 @@
 
 ## Version
 
-2.0.0
+2.0.1
 
 ## Subject
 
@@ -40,8 +40,8 @@ See Section *References*
 
 ## Outputs
 
-1. Preferences.2.0.0.tla,
-2. specifications.formal.2.0.0.md: formal specifications, endorses Preferences.2.0.0.tla,
+1. Preferences.tla,
+2. specifications.formal.2.0.1.md: formal specifications, endorses Preferences.tla,
 
 see Section Tasks.
 

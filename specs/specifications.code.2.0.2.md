@@ -2,7 +2,7 @@
 
 ## Version
 
-2.0.1
+2.0.2
 
 ## Conventions
 
@@ -20,7 +20,6 @@
 
 - width: exactly 96 (last character for EOL)
 - indentation: 4-space
-
 
 ### TLA
 
@@ -74,17 +73,13 @@ src/markdowntolatex/
 │   ├── __init__.py          # re-exports everything below
 │   ├── bash/                # Bash commands, e.g. "lualatex *tex"
 │   ├── input/               # Inputs
-│       ├── markdown/        # Consumed by component MARKDOWN
-│       │   └── template.md  # template
-│       ├── latex/           # Consumed by component LATEX  
-│       └── preferences/     # Default preferences
-│           └── preferences.ini   # Default preferences file.
+│       └─ latex/            # Consumed by component LATEX  
 │
 ├── user/                    # Abstraction for the User's
 │   ├── __init__.py
 │   ├── cli.py               # Definition of the CLI
 │   ├── choice.py            # abstraction for the User's choice.
-│   └── call.py              # Parsing and export functions e.g. markdown_to_pdf() When the binary is launched from CLI, relevant method is called hunder the hood.
+│   └── call.py              # Parsing and export functions
 │
 └── utilities.py             # get_file (public), imports helpers.
 ```
