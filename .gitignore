@@ -143,6 +143,6 @@ specs/documentation/*
 export*.sh
 *.tlaps*
 *.toolbox
-specs/TLA/*.aux
-specs/TLA/*.pdf
-specs/TLA/*.tex
+specs/TLA/MarkdownToLaTeX/*.aux
+specs/TLA/MarkdownToLaTeX/*.pdf
+specs/TLA/MarkdownToLaTeX/*.tex
