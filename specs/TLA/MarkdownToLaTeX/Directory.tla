@@ -2,10 +2,9 @@
 (**********************************************************************************************
   Directory.tla -- formal specification AND safety proofs of the User-
                    intent decision procedure for MarkdownToLaTeX 1.0.0.
-  Author.    Jean-Gabriel Cordier, with Claude.
-  Origin.    Earlier draft Tue Aug 08 2023 by gcordier.
-  This file. Kaizen step 1.3.7 -- three-step file-system chain with
-             safety theorems T1-T8 and complete TLAPS proof bodies.
+  This file. Kaizen step 2.0.2 -- two-step file-system chain with
+             lemmas TYPE, PATH, CONVERSEOF_PATH; theorems INV and
+             OK_OR_NOT_OK; all with complete TLAPS proof bodies.
  *********************************************************************************************)
 
 EXTENDS TLAPS, FiniteSets, Naturals
@@ -14,13 +13,9 @@ EXTENDS TLAPS, FiniteSets, Naturals
 (*                                VARIABLES                                                  *)
 (*===========================================================================================*)
 (*                                                                                           *)
-(*  directory -- proof flags accumulated about DIR. Each leaf is TRUE                        *)
-(*               initially and may flip to FALSE only via a FAIL action.                     *)
-(*               Flags never flip back.                                                      *)
-(*                                                                                           *)
-(*  check     -- inquiry flags. Each leaf is FALSE initially and may flip                    *)
-(*               to TRUE only when the corresponding check is performed.                     *)
-(*               Flags never flip back.                                                      *)
+(*  directory -- knowledge record for the two DIR checks. Each field starts as               *)
+(*               "is assumed false" and advances to "is proven true" or                      *)
+(*               "is proven false" via a single action. Fields never regress.                *)
 (*                                                                                           *)
 (*===========================================================================================*)
 
@@ -28,9 +23,6 @@ VARIABLES directory
 
 (*===========================================================================================*)
 (*                                  TYPE                                                     *)
-(*===========================================================================================*)
-(*  A single shared structural type.  Distinct meanings (verdict vs.                         *)
-(*  inquiry log) are carried by the actions, not the type.                                   *)
 (*===========================================================================================*)
 
 TruthValues == {
@@ -94,16 +86,16 @@ InitDirectory ==
 (*===========================================================================================*)
 (*                          SUCCESS / FAIL ACTIONS                                           *)
 (*===========================================================================================*)
-(*  Each step has two action shapes:                                                         *)
-(*    Next* (success): leaves `directory` unchanged, sets the matching                       *)
-(*                     `check` flag to TRUE.                                                 *)
-(*    NextNo* (fail) : flips the matching `directory` flag to FALSE AND                      *)
-(*                     sets the matching `check` flag to TRUE.                               *)
-(*  Every action requires AllProved as part of its guard, so                   *)
-(*  no further check fires after the first failure.                                          *)
+(*  Each decision point has two action shapes:                                               *)
+(*    Next*   (positive outcome): advances the relevant field(s) to "is proven true".        *)
+(*    NextNo* (negative outcome): advances the relevant field  to "is proven false".         *)
+(*  Guards are exact state-equality conditions; at most one proper action is enabled in any  *)
+(*  reachable state.                                                                         *)
 (*===========================================================================================*)
 
-(* Step 1: preferences/preferences.ini is a file. *)
+(* Step 1: Does preferences/preferences.ini exist as a file?  
+           NextFile proves both fields true at once: a file at that path implies 
+           the preferences/ directory exists, resolving the subdir check immediately.*)
 NextFile ==
   /\ directory = [
        has_preferences_file   |-> "is assumed false", 
@@ -136,11 +128,11 @@ NextNoFileNoDir ==
 (*===========================================================================================*)
 (*                          NO-DEADLOCK STUTTER ACTIONS                                      *)
 (*===========================================================================================*)
-(*  Once the chain has halted (success at step 3, or any failure), no                        *)
-(*  proper Next* / NextNo* action is enabled.  The four guards below                         *)
-(*  describe the four halt configurations; the body of each is the same                      *)
-(*  no-op (UNCHANGED directory /\ UNCHANGED check), so all four collapse                     *)
-(*  to a single state-transition shape in any safety proof.                                  *)
+(*  Once the chain has halted (success at step 1 or 2, or any failure), no                   *)
+(*  proper Next* / NextNo* action is enabled.  The three guards below                        *)
+(*  describe the three terminal configurations; the body of each is the same                 *)
+(*  no-op (UNCHANGED directory), so all three collapse to a single state-                    *)
+(*  transition shape in any safety proof.                                                    *)
 (*===========================================================================================*)
 NextNoDeadlockHasFile ==
   /\ AllProved
@@ -180,9 +172,10 @@ Spec == InitDirectory /\ [][NextDirectory]_directory
 (*===========================================================================================*)
 (*                              CHAIN INVARIANTS                                             *)
 (*===========================================================================================*)
-(*  Five state predicates that together capture every safety property of                     *)
-(*  interest.  They are bundled into Inv and proven simultaneously by                        *)
-(*  induction in theorem T_Inv.                                                              *)
+(*  State predicates capturing the safety properties of the two-step chain.                  *)
+(*  FileImpliesSubdirectory and NoSubdirectoryImpliesNoFile are bundled into                 *)
+(*  Inv (with TypeOK) and machine-checked by THEOREM INV via lemmas TYPE,                    *)
+(*  PATH, and CONVERSEOF_PATH.  VerdictsExclusive follows from TypeOK alone.                 *)
 (*===========================================================================================*)
 FileImpliesSubdirectory == 
   isProved(1) => isProved(2)
@@ -282,6 +275,4 @@ THEOREM OK_OR_NOT_OK == Spec => [](OK \/ NOT_OK)
 
 ===============================================================================================
 \* Modification History
-\* Last modified Thu May 21 12:28:28 CEST 2026 by gcordier
-\* Last modified Sat May 02 2026 by gcordier (kaizen 1.3.7)
-\* Last modified Sat May 02 11:19:29 CEST 2026 by gcordier (kaizen 1.3.6)
+\* Last modified Fri May 22 by gcordier (kaizen 2.0.2)
