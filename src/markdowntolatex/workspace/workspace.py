@@ -25,7 +25,9 @@
 from __future__ import annotations 
 from enum import Enum
 from pathlib import Path
-from user.preferences import load
+from string import Template
+import configparser
+
 
 
 class Verdict(Enum):
@@ -84,6 +86,17 @@ class Workspace:
         self.pref_subd = self.path / "preferences"
         self.pref_file = self.pref_subd / "preferences.ini"
         self.pref_dict = {}
+    #
+    def __load_preferences__(self):
+        config = configparser.ConfigParser(inline_comment_prefixes=(';'))
+        config.read(self.pref_file) 
+
+        self.pref_dict.update(
+            (section, {k: v.replace('$', '#') for k, v in dict(config[section]).items()}) 
+            for section in config.sections()
+        )
+        #prefs['general']['import_markdown'] = config.getboolean('general', 'import_markdown')
+        #print(self.pref_dict)
 
     def load_preferences(self) -> Workspace:
         """
@@ -108,13 +121,16 @@ class Workspace:
         """
         try:
             with open(self.pref_file, "r", encoding="utf-8") as f:
-                self.pref_dict = load(f)             # NextFile
+                self.__load_preferences__()          # NextFile
         except OSError as no_file:                   # NextNoFile
             if self.pref_subd.is_dir():              # NextNoFileHasDir
-                raise Workspace.Error(Prove.NO_FILE__HAS_SUBDIR, self.pref_file) from no_file
+                raise Workspace.Error(Verdict.NO_FILE__HAS_SUBDIR, self.pref_file) from no_file
             else:                                    # NextNoFileNoDir
-                raise Workspace.Error(Prove.NO_FILE__NO_SUBDIR, self.pref_subd) from no_file
+                raise Workspace.Error(Verdict.NO_FILE__NO_SUBDIR, self.pref_subd) from no_file
             #
         return self
     # END: load_preferences, class Workspace
 # END
+
+#w = Workspace()
+#w.load_preferences()

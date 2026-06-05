@@ -3,23 +3,21 @@
 #---------------------------------------------------------------------------------------------#
 # Description
 '''
-    Command line interface definition. 
-    A dictionary **ARGUMENT** stores all arguments definitions. 
+    The CLI is encoded as a Python dictionary whose keys are "version", "params". 
+    "help" option is implemented by an argparse.ArgumentParser instance.
 '''
 
-import json
-
-#The maximal number of input strings we expect from the user: 
-#    Two arguments (help, preferences), one value (for preferences). 
-#    Three, then
-MAX_NUMBEROF_INPUTS = 3 
-
-
-def get_arguments():
-    with open("cli.json", "r", encoding="utf-8") as f:
-        return json.load(f)
-    
-
-#The dictionary **ARGUMENT** stores all arguments definitions. 
-
-# END
+CLI = {
+    "version": {
+        "flags": [
+            "-v",
+            "--version"
+        ],
+        "params": {
+            "dest": "version",
+            "action": "store_true",
+            "default": False,
+            "help": "Package version, following the usual \"major.minor.micro\" scheme."
+        }
+    }
+}

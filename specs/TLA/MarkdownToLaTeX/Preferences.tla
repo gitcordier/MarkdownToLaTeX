@@ -49,21 +49,16 @@ vars == << state, preferences_keys >>
 States == { "init", "accepted", "rejected" }
 
 (*********************************************************************************************)
-(* Type invariant.                                                                           *)
+(* Type.                                                                                     *)
 (*********************************************************************************************)
 TypeOK ==
   /\ state \in States
   /\ preferences_keys \subseteq KEYS
 
-(*********************************************************************************************)
-(* Baseline acceptance criterion. The two MUST constraints, parametric in LUALATEX and       *)
-(* LUALATEX_CORE.                                                                            *)
-(*                                                                                           *)
-(* Open by design: extra conjuncts may be appended in future versions without altering the   *)
-(* surrounding state machine.                                                                *)
-(*********************************************************************************************)
-AcceptanceCriterion(S) ==
-  /\ LUALATEX_CORE \subseteq S
+(* 
+  LUALATEX_CORE \subseteq S \subseteq LUALATEX *)                                                               *)
+AcceptanceCriterion(S) == 
+  /\ LUALATEX_CORE \subseteq S 
   /\ S \subseteq LUALATEX              
 
 
@@ -75,8 +70,7 @@ AcceptanceCriterion(S) ==
 (* Note: Validate has InitPreferences as a precondition, so it can fire at most once.        *)
 (* After Validate, state /= "init". Hence InitPreferences = FALSE and Validate disabled.     *)
 (*********************************************************************************************)
-
-
+ 
 InitPreferences ==
   /\ state = "init"
   /\ preferences_keys = {}
@@ -89,12 +83,16 @@ Validate ==
 
 (* Terminal stutter, so TLC sees no deadlock at the accept/reject states. *)
 Done ==
-  /\ state \in { "accepted", "rejected" }
+  /\ state \in {"accepted", "rejected"}
   /\ UNCHANGED vars
 
-NextPreferences == Validate \/ Done
+NextPreferences == 
+  \/ Validate 
+  \/ Done
 
-Spec == InitPreferences /\ [][NextPreferences]_vars
+Spec == 
+  /\ InitPreferences 
+  /\ [][NextPreferences]_vars
 
 (*********************************************************************************************)
 (* Acceptance contract.                                                                      *)
@@ -105,8 +103,13 @@ Spec == InitPreferences /\ [][NextPreferences]_vars
 (* Together they yield, at terminal states, the bi-implication:                              *)
 (*   state = "accepted"  <=>  criterion(preferences_keys).                                   *)
 (*********************************************************************************************)
-Acceptance         == (state = "accepted")  => AcceptanceCriterion(preferences_keys)
-AcceptanceConverse == (state /= "accepted") => ~AcceptanceCriterion(preferences_keys)
+Acceptance         == (state = "accepted") =>  AcceptanceCriterion(preferences_keys)
+AcceptanceConverse == (state # "accepted") => ~AcceptanceCriterion(preferences_keys)
+
+Inv == 
+  /\ TypeOK
+  /\ Acceptance
+  /\ AcceptanceConverse
 
 (*********************************************************************************************)
 (* Theorems (TLAPS).                                                                         *)
@@ -115,40 +118,35 @@ AcceptanceConverse == (state /= "accepted") => ~AcceptanceCriterion(preferences_
 (*   InitPreferences => Inv,   Inv /\ [NextPreferences]_vars => Inv',   conclude by PTL.     *)
 (*********************************************************************************************)
 
-THEOREM TypeCorrect == Spec => []TypeOK
-  <1> USE DEF TypeOK, States, vars
-  <1>1. InitPreferences => TypeOK
-    <2> QED BY DEF InitPreferences
+LEMMA TYPE == Spec => []TypeOK
+  <1> USE DEF Spec, TypeOK, States, vars, 
+      InitPreferences, NextPreferences, Validate, Done
+  <1>1. InitPreferences => TypeOK OBVIOUS
   <1>2. TypeOK /\ [NextPreferences]_vars => TypeOK'
-    <2>1. CASE Validate
-      <3> QED BY DEF Validate
-    <2>2. CASE Done
-      <3> QED BY DEF Done
-    <2> QED
-      BY <2>1, <2>2 DEF NextPreferences
-  <1> QED BY <1>1, <1>2, PTL DEF Spec
+    <2>a CASE Validate OBVIOUS
+    <2>b CASE Done OBVIOUS
+    <2> QED BY <2>a, <2>b
+  <1> QED BY <1>1, <1>2, PTL
 
-THEOREM isAcceptance == Spec => []Acceptance
-  <1> USE DEF InitPreferences, Acceptance, AcceptanceCriterion, vars
+LEMMA ACCEPTANCE == Spec => []Acceptance
+  <1> USE DEF Spec, Acceptance, AcceptanceCriterion, vars, 
+      InitPreferences, NextPreferences, Validate, Done
   <1>1. InitPreferences => Acceptance OBVIOUS
   <1>2. Acceptance /\ [NextPreferences]_vars => Acceptance'
-    <2>1. CASE Validate
-      <3>   QED BY <2>1 DEF Validate
-    <2>2. CASE Done
-      <3>   QED BY <2>2 DEF Done
-    <2> QED BY <2>1, <2>2 DEF NextPreferences
-  <1> QED BY <1>1, <1>2, PTL DEF Spec
+    <2>a CASE Validate OBVIOUS 
+    <2>b CASE Done OBVIOUS 
+    <2> QED BY <2>a, <2>b
+  <1> QED BY <1>1, <1>2, PTL
 
-THEOREM isAcceptanceConverse == Spec => []AcceptanceConverse
-  <1> USE DEF  InitPreferences, AcceptanceConverse, AcceptanceCriterion, vars
-  <1>1. InitPreferences => AcceptanceConverse 
-    <2>   QED BY LualatexShape 
+LEMMA CONVERSEOF_ACCEPTANCE == Spec => []AcceptanceConverse
+  <1> USE DEF Spec, InitPreferences, AcceptanceConverse, AcceptanceCriterion, vars,
+      InitPreferences, NextPreferences, Validate, Done
+  <1>1. InitPreferences => AcceptanceConverse BY LualatexShape 
   <1>2. AcceptanceConverse /\ [NextPreferences]_vars => AcceptanceConverse'
-    <2>1. CASE Validate
-      <3>   QED BY <2>1 DEF Validate
-    <2>2. CASE Done
-      <3>   QED BY <2>2 DEF Done
-    <2> QED BY <2>1, <2>2 DEF NextPreferences
-  <1> QED BY <1>1, <1>2, PTL DEF Spec
+    <2>a CASE Validate OBVIOUS
+    <2>b CASE Done OBVIOUS
+    <2> QED BY <2>a, <2>b
+  <1> QED BY <1>1, <1>2, PTL
 
+THEOREM  INV == Spec => []Inv BY TYPE, ACCEPTANCE, CONVERSEOF_ACCEPTANCE, PTL DEF Inv
 ===============================================================================================

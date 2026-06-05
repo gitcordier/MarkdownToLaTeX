@@ -73,13 +73,12 @@ src/markdowntolatex/
 │   ├── __init__.py          # re-exports everything below
 │   ├── bash/                # Bash commands, e.g. "lualatex *tex"
 │   ├── input/               # Inputs
-│       └─ latex/            # Consumed by component LATEX  
+│   └─ latex/                # Consumed by component LATEX  
 │
 ├── user/                    # Abstraction for the User's
 │   ├── __init__.py
 │   ├── cli.py               # Definition of the CLI
-│   ├── choice.py            # abstraction for the User's choice.
-│   └── call.py              # Parsing and export functions
+│   └── choice.py            # abstraction for the User's choice.
 │
 └── utilities.py             # get_file (public), imports helpers.
 ```
